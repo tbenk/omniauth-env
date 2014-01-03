@@ -11,7 +11,7 @@ module OmniAuth
       def request_phase
         @user_data = {}
         @uid = env['HTTP_REMOTE_USER']
-        return fail![:no_user] unless @uid
+        return fail!(:no_user) unless @uid
 
         fill_ldap_info unless @options.empty?
 
