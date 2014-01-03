@@ -8,9 +8,18 @@ module OmniAuth
     class Env
       include OmniAuth::Strategy
 
+      def env_user
+        if env['HTTP_REMOTE_USER'] && env['HTTP_REMOTE_USER'] != ''
+          env['HTTP_REMOTE_USER']
+        else
+          env['HTTP_X_FORWARDED_USER']
+        end
+      end
+
       def request_phase
         @user_data = {}
-        @uid = env['HTTP_REMOTE_USER']
+        @uid = env_user
+
         return fail!(:no_user) unless @uid
 
         fill_ldap_info unless @options.empty?
