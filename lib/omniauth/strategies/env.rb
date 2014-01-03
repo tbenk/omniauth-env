@@ -22,6 +22,10 @@ module OmniAuth
 
         @uid = env_user.gsub(/@.*/, '')
 
+        # fill in some defaults
+        @user_data[:name] = @uid 
+        @user_data[:email] = env_user 
+
         fill_ldap_info unless @options.empty?
 
         @env['omniauth.auth'] = auth_hash
