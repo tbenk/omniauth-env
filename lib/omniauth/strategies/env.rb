@@ -18,7 +18,7 @@ module OmniAuth
 
       def request_phase
         @user_data = {}
-        @uid = env_user
+        @uid = env_user.gsub(/@.*/, '')
 
         return fail!(:no_user) unless @uid
 
@@ -40,7 +40,7 @@ module OmniAuth
       def fill_ldap_info
         adaptor = OmniAuth::LDAP::Adaptor.new @options
 
-        filter = Net::LDAP::Filter.eq('cn', @uid)
+        filter = Net::LDAP::Filter.eq('samAccountName', @uid)
         adaptor.connection.search(base: @options[:base], filter: filter) do |entry|
           @user_data[:name] = "#{entry.givenname.first} #{entry.sn.first}"
           @user_data[:email] = entry.mail.first
