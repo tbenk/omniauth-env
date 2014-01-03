@@ -18,9 +18,9 @@ module OmniAuth
 
       def request_phase
         @user_data = {}
-        @uid = env_user.gsub(/@.*/, '')
+        return fail!(:no_user) unless env_user
 
-        return fail!(:no_user) unless @uid
+        @uid = env_user.gsub(/@.*/, '')
 
         fill_ldap_info unless @options.empty?
 
